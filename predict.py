@@ -192,7 +192,7 @@ def handle_request0(request):
     debug = 'debug' in request.form
     base = ""
     try:
-        '''
+        
         if not 'csv' in request.files:
             raise Exception('please include a csv file')
         if not 'q' in request.form:
@@ -201,20 +201,20 @@ def handle_request0(request):
         q = request.form['q']
         table_id = os.path.splitext(csv.filename)[0]
         table_id = re.sub(r'\W+', '_', table_id)
-        '''
-        q = request.form['q']
-        table_id = 'OneMonthData2'
+        
+        #q = request.form['q']
+        #table_id = 'OneMonthData2'
         
         # it would be easy to do all this in memory but I'm lazy
-        '''
+        
         stream = io.StringIO(csv.stream.read().decode("UTF8"), newline=None)
         base = table_id + "_" + str(uuid.uuid4())
         add_csv.csv_stream_to_sqlite(table_id, stream, base + '.db')
         stream.seek(0)
         record = add_csv.csv_stream_to_json(table_id, stream, base + '.tables.jsonl')
         stream.seek(0)
-        '''
-        base='OneMonthData2'
+        
+        #base='OneMonthData2'
         add_question.question_to_json(table_id, q, base + '.jsonl')
         annotation = annotate_ws.annotate_example_ws(add_question.encode_question(table_id, q),
                                                      record)
@@ -225,9 +225,9 @@ def handle_request0(request):
         code = 200
 
         if not debug:
-            #os.remove(base + '.db')
+            os.remove(base + '.db')
             os.remove(base + '.jsonl')
-            #os.remove(base + '.tables.jsonl')
+            os.remove(base + '.tables.jsonl')
             os.remove(base + '_tok.jsonl')
             os.remove('results_' + base + '.jsonl')
             if 'result' in message:
